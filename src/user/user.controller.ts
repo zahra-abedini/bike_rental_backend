@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Public } from 'src/auth/public.decorator';
 import { IsEmail, IsString, MinLength } from 'class-validator';
@@ -9,6 +9,9 @@ import {
   ApiTags,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { CurrentUser } from 'src/auth/current-user.decorator';
+import type { JwtUser } from 'src/auth/current-user.decorator';
+import { UpdateProfileDto } from './update-profile.dto';
 
 class UserResponseDto {
   @ApiProperty({ example: 1 })
@@ -36,7 +39,15 @@ export class CreateUserDto {
   password: string;
 }
 
+class UserRentalResponseDto {
+  @ApiProperty({ example: 1 }) id: number;
+  @ApiProperty({ example: '2026-02-02T10:00:00Z' }) startTime: string;
+  @ApiProperty({ example: 'finished' }) status: string;
+  @ApiProperty({ example: { brand: 'Giant', model: 'Escape 3' } }) bike: any;
+}
+
 @ApiTags('Users')
+@ApiBearerAuth()
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -78,5 +89,64 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'توکن یافت نشد یا منقضی شده است' })
   getAll() {
     return this.userService.findAll();
+  }
+
+  // 👤 پروفایل
+  @Get('profile')
+  @ApiOperation({
+    summary: 'دریافت اطلاعات پروفایل شخصی',
+    description: 'اطلاعات پایه کاربر جاری را برمی‌گرداند.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'اطلاعات پروفایل دریافت شد.',
+    schema: {
+      example: {
+        id: 1,
+        name: 'Zahra',
+        email: 'zahra@test.com',
+        profilePicture: 'url',
+      },
+    },
+  })
+  getMe(@CurrentUser() user: JwtUser) {
+    return this.userService.getProfile(user.userId);
+  }
+
+  // 🚴 تاریخچه رنت‌ها
+  @Get('rentals')
+  @ApiOperation({ summary: 'مشاهده تاریخچه اجاره‌های من' })
+  @ApiResponse({
+    status: 200,
+    description: 'لیست رنت‌ها به همراه اطلاعات دوچرخه‌ها',
+    type: [UserRentalResponseDto],
+  })
+  getMyRentals(@CurrentUser() user: JwtUser) {
+    return this.userService.getRentals(user.userId);
+  }
+
+  // 💳 پرداخت‌ها
+  @Get('payments')
+  @ApiOperation({ summary: 'مشاهده تاریخچه تراکنش‌های مالی من' })
+  @ApiResponse({
+    status: 200,
+    description: 'لیست تمامی پرداخت‌ها',
+    schema: {
+      example: [
+        { id: 10, amount: 50000, status: 'success', date: '2026-02-01' },
+      ],
+    },
+  })
+  getMyPayments(@CurrentUser() user: JwtUser) {
+    return this.userService.getPayments(user.userId);
+  }
+
+  // ✏️ ویرایش پروفایل
+  @Put('profile')
+  @ApiOperation({ summary: 'آپدیت اطلاعات کاربری' })
+  @ApiResponse({ status: 200, description: 'پروفایل با موفقیت بروزرسانی شد' })
+  @ApiResponse({ status: 400, description: 'داده‌های ارسالی معتبر نیستند' })
+  updateProfile(@CurrentUser() user: JwtUser, @Body() body: UpdateProfileDto) {
+    return this.userService.updateProfile(user.userId, body);
   }
 }

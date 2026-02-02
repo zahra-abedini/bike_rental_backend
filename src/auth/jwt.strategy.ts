@@ -4,8 +4,9 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../user/user.service';
 
 interface JwtPayload {
-  userId: number;
-  role: string;
+  sub: number; // استاندارد JWT
+  email: string;
+  role: 'user' | 'admin';
   iat?: number;
   exp?: number;
 }
@@ -16,12 +17,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'SHARED_SECRET_KEY',
+      secretOrKey: process.env.JWT_SECRET || 'SHARED_SECRET_KEY',
     });
   }
 
   async validate(payload: JwtPayload) {
-    const user = await this.userService.findOne(payload.userId);
+    const user = await this.userService.findOne(payload.sub);
 
     if (!user) {
       throw new UnauthorizedException('User no longer exists');
@@ -29,7 +30,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     return {
       userId: user.id,
-      role: 'user',
+      email: user.email,
+      role: payload.role,
     };
   }
 }

@@ -24,6 +24,7 @@ export class AuthService {
 
     // این همان اطلاعاتی است که به JwtStrategy می‌رود
     const payload = {
+      sub: user.id,
       userId: user.id,
       role: 'user', // یا user.role اگر در دیتابیس دارید
     };

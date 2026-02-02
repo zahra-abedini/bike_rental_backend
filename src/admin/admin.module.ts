@@ -6,10 +6,13 @@ import { AdminService } from './admin.service';
 import { AdminAuthService } from './admin-auth.service';
 import { AdminController } from './admin.controller';
 import { AdminAuthController } from './admin-auth.controller';
+import { User } from '../user/user.entity';
+import { Rental } from '../rental/rental.entity';
+import { Payment } from '../payment/payment.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Admin]),
+    TypeOrmModule.forFeature([Admin, User, Rental, Payment]),
     JwtModule.register({
       secret: 'ADMIN_SECRET_KEY',
       signOptions: { expiresIn: '1d' },
