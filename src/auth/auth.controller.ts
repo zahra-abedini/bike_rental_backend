@@ -3,9 +3,6 @@ import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { ApiOperation, ApiProperty, ApiResponse } from '@nestjs/swagger';
-
-// ... سایر ایمپورت‌ها
-
 export class LoginDto {
   @ApiProperty({ example: 'zahra@test.com' })
   @IsEmail({}, { message: 'ایمیل وارد شده معتبر نیست' })
@@ -30,6 +27,21 @@ export class AuthController {
     schema: {
       example: {
         access_token: 'string',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'اعتبارنامه نامعتبر (ایمیل یا رمز عبور اشتباه است)',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'خطای اعتبارسنجی (داده‌های ورودی فرمت صحیح ندارند)',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['رمز عبور باید حداقل ۶ کاراکتر باشد'],
+        error: 'Bad Request',
       },
     },
   })

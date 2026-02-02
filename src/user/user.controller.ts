@@ -2,58 +2,80 @@ import { Controller, Post, Get, Body } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Public } from 'src/auth/public.decorator';
 import { IsEmail, IsString, MinLength } from 'class-validator';
-import { ApiOperation, ApiProperty, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
-export class CreateUserDto {
+class UserResponseDto {
+  @ApiProperty({ example: 1 })
+  id: number;
+
   @ApiProperty({ example: 'Zahra' })
-  @IsString()
   name: string;
 
   @ApiProperty({ example: 'zahra@test.com' })
+  email: string;
+}
+
+export class CreateUserDto {
+  @ApiProperty({ example: 'Zahra', description: 'نام کامل کاربر' })
+  @IsString()
+  name: string;
+
+  @ApiProperty({ example: 'zahra@test.com', description: 'ایمیل منحصر به فرد' })
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: '123456' })
+  @ApiProperty({ example: '123456', description: 'رمز عبور (حداقل ۶ کاراکتر)' })
   @IsString()
   @MinLength(6)
   password: string;
 }
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Public()
   @Post('create')
-  @ApiOperation({ summary: 'ایجاد کاربر جدید' })
+  @ApiOperation({
+    summary: 'ثبت‌نام کاربر جدید',
+    description: 'ایجاد یک حساب کاربری جدید در سیستم',
+  })
   @ApiResponse({
     status: 201,
     description: 'کاربر با موفقیت ساخته شد',
-    schema: { example: { id: 1, name: 'Zahra', email: 'zahra@test.com' } },
+    type: UserResponseDto,
   })
   @ApiResponse({
     status: 400,
-    description: 'داده‌های ارسالی اشتباه است (Validation Error)',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: ['email must be an email'],
-        error: 'Bad Request',
-      },
-    },
+    description: 'خطای اعتبارسنجی داده‌ها',
   })
   @ApiResponse({
     status: 409,
-    description: 'ایمیل قبلاً ثبت شده است',
-    schema: {
-      example: { statusCode: 409, message: 'Conflict: Email already exists' },
-    },
+    description: 'این ایمیل قبلاً در سیستم ثبت شده است',
   })
   create(@Body() body: CreateUserDto) {
     return this.userService.create(body.name, body.email, body.password);
   }
 
+  @ApiBearerAuth()
   @Get()
+  @ApiOperation({
+    summary: 'دریافت لیست تمامی کاربران',
+    description: 'این متد فقط برای مدیران یا کاربران احراز هویت شده است',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'لیست کاربران با موفقیت بازیابی شد',
+    type: [UserResponseDto],
+  })
+  @ApiResponse({ status: 401, description: 'توکن یافت نشد یا منقضی شده است' })
   getAll() {
     return this.userService.findAll();
   }
