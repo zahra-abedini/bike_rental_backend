@@ -7,6 +7,11 @@ import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: ['http://localhost:4200', 'http://localhost:6100'], // آدرس Angular
+    credentials: true,
+  });
+
   // ValidationPipe برای DTOها و جلوگیری از ورود داده اشتباه
   app.useGlobalPipes(
     new ValidationPipe({

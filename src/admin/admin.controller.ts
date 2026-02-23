@@ -14,6 +14,9 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/roles.enum';
 import { Param } from '@nestjs/common';
 import { AdminUserProfileDto } from './admin-user-profile.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 class AdminResponseDto {
   @ApiProperty({ example: 1 })
@@ -74,12 +77,12 @@ export class AdminController {
       ],
     },
   })
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('admin-jwt'), RolesGuard)
   getAll() {
     return this.adminService.findAll();
   }
 
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('admin-jwt'), RolesGuard)
   @Get('users')
   @ApiOperation({
     summary: 'دریافت لیست تمامی کاربران سیستم',
@@ -96,7 +99,7 @@ export class AdminController {
     return this.adminService.findAllUsers();
   }
 
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('admin-jwt'), RolesGuard)
   @Get('users/:id')
   @ApiOperation({
     summary: 'مشاهده پروفایل کامل و دقیق یک کاربر',
@@ -113,7 +116,7 @@ export class AdminController {
     return this.adminService.getUserProfile(id);
   }
 
-  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('admin-jwt'), RolesGuard)
   @Put('users/:id')
   @ApiOperation({
     summary: 'ویرایش اطلاعات کاربر توسط مدیر',

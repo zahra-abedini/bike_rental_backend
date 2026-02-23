@@ -22,7 +22,10 @@ export class AdminAuthService {
     };
 
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        secret: 'ADMIN_SECRET_KEY',
+        expiresIn: '1d',
+      }),
     };
   }
 }
