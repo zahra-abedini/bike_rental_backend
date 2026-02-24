@@ -54,6 +54,7 @@ export class UserService {
       name: user.name,
       email: user.email,
       profile_image: user.profile_image,
+      created_at: user.created_at,
       activeBikeId: activeRental ? activeRental.bike_id : null,
       activeRental,
     };

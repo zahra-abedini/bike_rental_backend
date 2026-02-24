@@ -22,6 +22,9 @@ class UserResponseDto {
 
   @ApiProperty({ example: 'zahra@test.com' })
   email!: string;
+
+  @ApiProperty({ example: '2026-02-24T12:00:00Z' })
+  created_at!: Date;
 }
 
 export class CreateUserDto {
