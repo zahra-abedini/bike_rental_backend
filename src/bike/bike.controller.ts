@@ -25,35 +25,30 @@ import {
 export class BikeController {
   constructor(private bikeService: BikeService) {}
 
-  @Get(':id') // تعریف مسیر پارامتریک
-  @ApiOperation({
-    summary: 'دریافت جزئیات کامل یک دوچرخه با آی‌دی',
-    description:
-      'این متد تمام اطلاعات یک دوچرخه شامل وضعیت (status)، لوکیشن و نام را برمی‌گرداند.',
-  })
+  @Get(':id')
+  @ApiOperation({ summary: 'دریافت جزئیات کامل یک دوچرخه' })
   @ApiResponse({
     status: 200,
-    description: 'اطلاعات دوچرخه با موفقیت یافت شد.',
-    type: Bike,
+    description: 'اطلاعات دوچرخه به همراه زمان شروع اجاره (اگر رزرو باشد)',
     schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          id: { type: 'number', example: 1 },
-          name: { type: 'string', example: 'دوچرخه شهری' },
-          status: { type: 'string', example: 'available' },
-          latitude: { type: 'number', example: 52.37 },
-          longitude: { type: 'number', example: 4.89 },
+      type: 'object', // چون فقط یک آبجکت است، نه آرایه
+      properties: {
+        id: { type: 'number', example: 1 },
+        name: { type: 'string', example: 'دوچرخه شهری' },
+        status: { type: 'string', example: 'rented' },
+        latitude: { type: 'number', example: 52.37 },
+        longitude: { type: 'number', example: 4.89 },
+        rentalStartTime: {
+          type: 'string',
+          format: 'date-time',
+          example: '2026-02-24T10:00:00Z',
+          nullable: true,
+          description: 'اگر وضعیت available باشد، این فیلد null است',
         },
       },
     },
   })
-  @ApiResponse({
-    status: 404,
-    description: 'دوچرخه‌ای با این آی‌دی وجود ندارد.',
-  })
-  getOne(@Param('id', ParseIntPipe) id: number): Promise<Bike> {
+  getOne(@Param('id', ParseIntPipe) id: number) {
     return this.bikeService.findOne(id);
   }
 
