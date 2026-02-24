@@ -34,4 +34,10 @@ export class PaymentService {
       status: 'success',
     });
   }
+
+  async findAll() {
+    return this.paymentRepo.find({
+      order: { id: 'DESC' }, // نمایش جدیدترین‌ها در ابتدا
+    });
+  }
 }

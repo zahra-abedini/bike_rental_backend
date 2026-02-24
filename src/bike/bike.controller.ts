@@ -7,6 +7,8 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BikeService } from './bike.service';
 import { Roles } from '../auth/roles.decorator';
@@ -93,6 +95,7 @@ export class BikeController {
     status: 400,
     description: 'خطا در اعتبارسنجی داده‌های ورودی.',
   })
+  @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() body: CreateBikeDto): Promise<Bike> {
     return this.bikeService.createBike(body);
   }

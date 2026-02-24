@@ -8,7 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:6100'], // آدرس Angular
+    origin: [
+      'http://localhost:6200',
+      'http://localhost:6100',
+      'https://uncognisable-lorrine-superthankfully.ngrok-free.dev',
+    ], // آدرس Angular
     credentials: true,
   });
 
@@ -20,6 +24,7 @@ async function bootstrap() {
       transform: true, // تبدیل خودکار رشته به number و غیره
     }),
   );
+  app.enableCors();
 
   // Exception filter
   app.useGlobalFilters(new AllExceptionsFilter());

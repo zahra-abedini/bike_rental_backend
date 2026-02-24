@@ -1,4 +1,11 @@
-import { Controller, Post, Param, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Param,
+  HttpCode,
+  HttpStatus,
+  Get,
+} from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import {
   ApiTags,
@@ -7,6 +14,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Payment } from './payment.entity';
 
 @ApiTags('Payment')
 @ApiBearerAuth()
@@ -47,5 +55,16 @@ export class PaymentController {
   })
   pay(@Param('rentalId') id: number) {
     return this.paymentService.pay(Number(id));
+  }
+
+  @Get() // آدرس: GET /payment
+  @ApiOperation({ summary: 'مشاهده لیست تمام تراکنش‌های مالی' })
+  @ApiResponse({
+    status: 200,
+    description: 'لیست پرداخت‌ها دریافت شد.',
+    type: [Payment], // برگرداندن آرایه‌ای از مدل Payment
+  })
+  findAll() {
+    return this.paymentService.findAll();
   }
 }
