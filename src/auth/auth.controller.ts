@@ -6,12 +6,12 @@ import { ApiOperation, ApiProperty, ApiResponse } from '@nestjs/swagger';
 export class LoginDto {
   @ApiProperty({ example: 'zahra@test.com' })
   @IsEmail({}, { message: 'ایمیل وارد شده معتبر نیست' })
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: '123456' })
   @IsString()
   @MinLength(6, { message: 'رمز عبور باید حداقل ۶ کاراکتر باشد' })
-  password: string;
+  password!: string;
 }
 
 @Controller('auth')

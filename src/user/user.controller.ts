@@ -15,34 +15,34 @@ import { UpdateProfileDto } from './update-profile.dto';
 
 class UserResponseDto {
   @ApiProperty({ example: 1 })
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 'Zahra' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'zahra@test.com' })
-  email: string;
+  email!: string;
 }
 
 export class CreateUserDto {
   @ApiProperty({ example: 'Zahra', description: 'نام کامل کاربر' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'zahra@test.com', description: 'ایمیل منحصر به فرد' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: '123456', description: 'رمز عبور (حداقل ۶ کاراکتر)' })
   @IsString()
   @MinLength(6)
-  password: string;
+  password!: string;
 }
 
 class UserRentalResponseDto {
-  @ApiProperty({ example: 1 }) id: number;
-  @ApiProperty({ example: '2026-02-02T10:00:00Z' }) startTime: string;
-  @ApiProperty({ example: 'finished' }) status: string;
+  @ApiProperty({ example: 1 }) id!: number;
+  @ApiProperty({ example: '2026-02-02T10:00:00Z' }) startTime!: string;
+  @ApiProperty({ example: 'finished' }) status!: string;
   @ApiProperty({ example: { brand: 'Giant', model: 'Escape 3' } }) bike: any;
 }
 
@@ -106,6 +106,7 @@ export class UserController {
         name: 'Zahra',
         email: 'zahra@test.com',
         profilePicture: 'url',
+        activeBikeId: 5,
       },
     },
   })

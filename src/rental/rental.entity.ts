@@ -3,23 +3,23 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity('rentals')
 export class Rental {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  user_id: number;
+  user_id!: number;
 
   @Column()
-  bike_id: number;
+  bike_id!: number;
 
   @Column()
-  start_time: Date;
+  start_time!: Date;
 
   @Column({ nullable: true })
-  end_time: Date;
+  end_time!: Date;
 
   @Column({ nullable: true })
-  cost: number;
+  cost!: number;
 
   @Column({ default: 'ongoing' })
-  status: string;
+  status!: string;
 }

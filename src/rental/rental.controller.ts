@@ -24,11 +24,11 @@ import {
 export class StartRentalDto {
   @ApiProperty({ example: 1, description: 'شناسه کاربر' })
   @IsNumber({}, { message: 'شناسه کاربر باید عدد باشد' })
-  userId: number;
+  userId!: number;
 
   @ApiProperty({ example: 10, description: 'شناسه دوچرخه' })
   @IsNumber({}, { message: 'شناسه دوچرخه باید عدد باشد' })
-  bikeId: number;
+  bikeId!: number;
 }
 
 @ApiTags('Rentals')

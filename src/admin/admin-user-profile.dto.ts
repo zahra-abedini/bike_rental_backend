@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class RentalDto {
   @ApiProperty({ example: 1 })
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 1 })
-  bike_id: number;
+  bike_id!: number;
 
   @ApiProperty({ example: '2026-02-02T10:00:00.000Z' })
-  start_time: Date;
+  start_time!: Date;
 
   @ApiProperty({ example: '2026-02-02T12:00:00.000Z' })
   end_time?: Date;
@@ -17,39 +17,39 @@ export class RentalDto {
   cost?: number;
 
   @ApiProperty({ example: 'ongoing' })
-  status: string;
+  status!: string;
 }
 
 export class PaymentDto {
   @ApiProperty({ example: 1 })
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 1 })
-  rental_id: number;
+  rental_id!: number;
 
   @ApiProperty({ example: 50 })
-  amount: number;
+  amount!: number;
 
   @ApiProperty({ example: 'paid' })
-  status: string;
+  status!: string;
 }
 
 export class AdminUserProfileDto {
   @ApiProperty({ example: 1 })
-  id: number;
+  id!: number;
 
   @ApiProperty({ example: 'Zahra' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'zahra@test.com' })
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: 'https://cdn.site/avatar.png', required: false })
   profile_image?: string;
 
   @ApiProperty({ type: [RentalDto] })
-  rentals: RentalDto[];
+  rentals!: RentalDto[];
 
   @ApiProperty({ type: [PaymentDto] })
-  payments: PaymentDto[];
+  payments!: PaymentDto[];
 }

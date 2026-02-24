@@ -11,7 +11,7 @@ import {
 
 class LoginResponseDto {
   @ApiProperty({ example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' })
-  access_token: string;
+  access_token!: string;
 
   @ApiProperty({ example: { id: 1, email: 'admin@test.com' } })
   user: any;
@@ -20,12 +20,12 @@ class LoginResponseDto {
 class LoginAdminDto {
   @ApiProperty({ example: 'admin@test.com', description: 'ایمیل ادمین' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: '123456', description: 'رمز عبور' })
   @IsString()
   @MinLength(6)
-  password: string;
+  password!: string;
 }
 
 @ApiTags('Admin Auth')

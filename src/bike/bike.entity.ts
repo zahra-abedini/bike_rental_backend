@@ -3,14 +3,17 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity('bikes')
 export class Bike {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
+
+  @Column() // اضافه کردن ستون نام
+  name!: string;
 
   @Column({ default: 'available' })
-  status: string; // available | rented
+  status!: string;
 
   @Column('double precision')
-  latitude: number;
+  latitude!: number;
 
   @Column('double precision')
-  longitude: number;
+  longitude!: number;
 }
