@@ -11,7 +11,8 @@ async function bootstrap() {
     origin: [
       'http://localhost:6200',
       'http://localhost:6100',
-      'https://uncognisable-lorrine-superthankfully.ngrok-free.dev',
+      'http://172.20.10.2:6200',
+      'http://172.20.10.2:6100',
     ], // آدرس Angular
     credentials: true,
   });
@@ -24,7 +25,6 @@ async function bootstrap() {
       transform: true, // تبدیل خودکار رشته به number و غیره
     }),
   );
-  app.enableCors();
 
   // Exception filter
   app.useGlobalFilters(new AllExceptionsFilter());
